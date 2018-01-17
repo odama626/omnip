@@ -1,0 +1,19 @@
+{
+  "name": "helpers",
+  "version": "1.0.0",
+  "description": "commonly used helper functions",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "helpers",
+    "simplify",
+    "commonly_used"
+  ],
+  "author": "Adam Sparks",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^22.1.1"
+  }
+}
