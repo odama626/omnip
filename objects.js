@@ -1,9 +1,17 @@
+
 /**
- * @description given a list of keys, will return a function to check equality between 2 objects on given keys
- * @param {string} keys a list of object keys
- * @returns a compare function => returns true if all keys passed into keysMatch match on both objects
+ * @description creates an array of all unique keys across all objects in array
+ * @param {object[]} list an array of objects
+ * @returns {string[]} array of all unique keys
  */
-const keysMatch = (...keys) => (a, b) => a && b? keys.reduce((accum, cur) => accum && a[cur] === b[cur], true) : false;
+const gatherKeys = (list) => list.reduce((acc, cur) => [...acc, ...Object.keys(cur).filter(i => !acc.includes(i))], []);
+
+/**
+ * @description creates a equality function with keys given
+ * @param {...string} keys a list of object keys
+ * @returns {(a,b) => boolean}a compare function that will check equality with each key
+ */
+const compareWith = (...keys) => (a, b) => a && b? keys.reduce((acc, cur) => acc && a[cur] === b[cur], true) : false;
 
 /**
  * @description reduce an array of key value pairs into a single object
@@ -20,6 +28,13 @@ const reduceArray = (acc, cur) => ({...acc, ...cur})
  * @returns object transformed by map callback function
  */
 const map = (obj, callback) => Object.keys(obj).map((key, i, keys) => callback(key, obj[key], i, keys, obj)).reduce(reduceArray);
+
+/**
+ * @description given a list of keys will create a new object with subKeys of given object
+ * @param {...string} keys a list of keys to reduce object to
+ * @returns a function that will reduce objects to given keys
+ */
+const subObject = (...keys) => (item) => keys.map(key => ({[key]: item[key]})).reduce(reduceArray);
 
 /**
  * @description A reduce function that will merge all objects with the same value for key when used in array.reduce()
@@ -42,8 +57,10 @@ const keyUnion = (reduceKey) => (a, c) => {
 }
 
 module.exports = {
-	keysMatch,
 	keyUnion,
 	reduceArray,
+	compareWith,
+	subObject,
+	gatherKeys,
 	map
 }

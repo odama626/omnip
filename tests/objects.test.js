@@ -26,9 +26,14 @@ test('reduceArray', () => {
 	expect([{a: 1}, {b: 2}].reduce(O.reduceArray)).toEqual({a: 1, b: 2})
 })
 
-test('keysMatch', () => {
-	let t = O.keysMatch('id', 'email', 'gender');
-	let f = O.keysMatch('first_name');
+test('compareWith', () => {
+	let t = O.compareWith('id', 'email', 'gender');
+	let f = O.compareWith('first_name');
 	expect(t(testRecord, transformedTest)).toBe(true);
 	expect(f(testRecord, transformedTest)).toBe(false);
+})
+
+test('gatherKeys', () => {
+	let list = [{a: '1', b: '2'}, {a: 1}, {c: 1, d: '2', b: 'blah'}]
+	expect(O.gatherKeys(list)).toEqual(['a', 'b', 'c', 'd']);
 })
