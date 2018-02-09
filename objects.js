@@ -23,11 +23,26 @@ const reduceArray = (acc, cur) => ({...acc, ...cur})
 
 /**
  * @description Object equivalent of Array.map() passes arguments (key, value, index, keys[], object)
- * @param {*} obj 
- * @param {(key, value, index?, keys[], values[]) => Object.<string, number>} callback 
+ * @param {*} glob 
+ * @param {(key: string, value: any, index:number, keys: string[], values: any[]) => Object.<string, number>} callback 
  * @returns object transformed by map callback function
  */
-const map = (obj, callback) => Object.keys(obj).map((key, i, keys) => callback(key, obj[key], i, keys, obj)).reduce(reduceArray);
+const map = (glob, callback) => Object.keys(glob).map((key, i, keys) => callback(key, glob[key], i, keys, glob)).reduce(reduceArray);
+
+/**
+ * 
+ * @param {*} glob 
+ * @param {(accumulator: any, currentKey: string, currentValue: any) => any} callback 
+ * @param {*} initialValue 
+ */
+const reduce = (glob, callback, initialValue) => Object.keys(glob).reduce((accum, cur) => callback(accum,cur, glob[cur]), initialValue)
+
+/**
+ * 
+ * @param {*} glob 
+ * @param {(key: string, value: any) => boolean} callback 
+ */
+const filter = (glob, callback) => Object.keys(glob).filter(key => callback(key, glob[key])).map(key => ({[key]: glob[key]})).reduce(reduceArray);
 
 /**
  * @description given a list of keys will create a new object with subKeys of given object
@@ -35,6 +50,13 @@ const map = (obj, callback) => Object.keys(obj).map((key, i, keys) => callback(k
  * @returns a function that will reduce objects to given keys
  */
 const subObject = (...keys) => (item) => keys.map(key => ({[key]: item[key]})).reduce(reduceArray);
+
+/**
+ * @description given a preface string, will preface all keys in a given object.  Ex: prefaceKeys('a_')({b: 1}) => {a_b: 1}
+ * @param {string} preface a string to preface all keys in objects with
+ * @returns an function that takes an object to modify 
+ */
+const prefaceKeys = preface => glob => map(glob, (key, value) => ({[preface+key] : value}));
 
 /**
  * @description A reduce function that will merge all objects with the same value for key when used in array.reduce()
@@ -62,5 +84,8 @@ module.exports = {
 	compareWith,
 	subObject,
 	gatherKeys,
-	map
+	prefaceKeys,
+	map,
+	filter,
+	reduce
 }
