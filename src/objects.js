@@ -16,8 +16,8 @@ const compareWith = (...keys) => (a, b) => a && b? keys.reduce((acc, cur) => acc
 /**
  * @description reduce an array of key value pairs into a single object
  * @param {Object} acc 
- * @param {Object.<string, value>} cur
- * @returns {Object.<string, value>} object with all key value pairs from array
+ * @param {Object.<string, *>} cur
+ * @returns {Object.<string, *>} object with all key value pairs from array
  */
 const reduceArray = (acc, cur) => ({...acc, ...cur})
 
@@ -36,6 +36,25 @@ const map = (glob, callback) => Object.keys(glob).map((key, i, keys) => callback
  * @param {*} initialValue 
  */
 const reduce = (glob, callback, initialValue) => Object.keys(glob).reduce((accum, cur) => callback(accum,cur, glob[cur]), initialValue)
+
+/**
+ * @description follows path of keys to pluck a deeply nested value out
+ * @param {*} glob object to work on
+ * @param {string} path path to key you want out of glob
+ * @returns value of nested key or undefined if it doesn't exist
+ */
+const pluck = (glob, path) => {
+	let nextKey = path.slice(0, Math.max(path.indexOf('.'), 0)) || path;
+	if ( typeof glob === 'object' && nextKey in glob) {
+		if (path.length > nextKey.length) {
+			return pluck(glob[nextKey], path.slice(nextKey.length+1));
+		} else {
+			return glob[nextKey];
+		}
+	} else {
+		return undefined;
+	}
+}
 
 /**
  * 
@@ -64,6 +83,7 @@ const prefaceKeys = preface => glob => map(glob, (key, value) => ({[preface+key]
  * @returns reduce function to be used in array.reduce()
  */
 const keyUnion = (reduceKey) => (a, c) => {
+	let key;
 	for (let i = 0; i < a.length; i++) {
 		if (a[i][reduceKey] === c[reduceKey]) {
 			for (key in a[i]) {
@@ -87,5 +107,6 @@ module.exports = {
 	prefaceKeys,
 	map,
 	filter,
-	reduce
+	reduce,
+	pluck
 }

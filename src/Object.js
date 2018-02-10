@@ -1,11 +1,11 @@
-import { map, prefaceKeys, reduce, subObject, filter } from './objects';
+const { map, prefaceKeys, reduce, subObject, filter } = require('./objects');
 
 module.exports = class Omnip {
 
   /**
    * @description returns a new functional object
    * @param {Object<string, *>} attachment an object to omnify
-   * @returns {Omnip} omnip
+   *
    */
   constructor(attachment) {
     let key;
@@ -59,27 +59,3 @@ module.exports = class Omnip {
     return prefaceKeys(keyWith)(this);
   }
 }
-
-// const a = {
-//   a: 1,
-//   b: 2,
-//   c: 3
-// };
-
-// const o = new Omnip(a);
-
-// let result = o.map((key, value) => ({ [key]: value * 7 }));
-
-// console.log(result);
-
-// result = o.filter(key => key !== 'b');
-// console.log(result);
-
-// result = o.preface('pre_');
-// console.log(result);
-
-// result = o.reduce((accum, key, value) => value+accum, 6)
-// console.log(result);
-
-// result = o.subObject('a', 'c');
-// console.log(result);

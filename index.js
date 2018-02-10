@@ -4,6 +4,6 @@ module.exports = {
 	F: require('./src/functions'),
 	IO: require('./src/files'),
 	CSV: require('./src/csv'),
-	OmnipifyObject: require('./src/omnipify')
+	Object: require('./src/Object')
 }
 

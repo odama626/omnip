@@ -47,3 +47,8 @@ test('gatherKeys', () => {
   let list = [{ a: '1', b: '2' }, { a: 1 }, { c: 1, d: '2', b: 'blah' }];
   expect(O.gatherKeys(list)).toEqual(['a', 'b', 'c', 'd']);
 });
+
+test('pluck', () => {
+  expect(O.pluck(testRecord, 'id')).toBe('1');
+  expect(O.pluck(testRecord, 'id.blah')).toBe(undefined);
+})
